@@ -10,6 +10,7 @@ public class GameServicesAndComponentsExampleGame : Game
     private SpriteBatch _spriteBatch;
     private uint _spaceKeyPressCount = 0;
     private KeyboardState _previousKeyboardState;
+    private IAchievementService _achievementService;
 
     public GameServicesAndComponentsExampleGame()
     {
@@ -21,6 +22,9 @@ public class GameServicesAndComponentsExampleGame : Game
     protected override void Initialize()
     {
         // TODO: Add your initialization logic here
+        
+        _achievementService = new StandaloneAchievementService(this);
+        Services.AddService<IAchievementService>(_achievementService);
 
         base.Initialize();
     }
@@ -30,6 +34,7 @@ public class GameServicesAndComponentsExampleGame : Game
         _spriteBatch = new SpriteBatch(GraphicsDevice);
 
         // TODO: use this.Content to load your game content here
+        _achievementService.UpdateAchievement("Game was loaded!", 100);
 
         base.LoadContent();
     }
@@ -41,11 +46,12 @@ public class GameServicesAndComponentsExampleGame : Game
 
         var currentKeyboardState = Keyboard.GetState();
 
-        if(currentKeyboardState.IsKeyDown(Keys.Space) && _previousKeyboardState.IsKeyUp(Keys.Space))
+        if(_spaceKeyPressCount < 100 && currentKeyboardState.IsKeyDown(Keys.Space) && _previousKeyboardState.IsKeyUp(Keys.Space))
         {
             _spaceKeyPressCount++;
 
             // TODO: Advance achievement
+            _achievementService.UpdateAchievement("Press space 100 times!", _spaceKeyPressCount);
         }
 
         _previousKeyboardState = currentKeyboardState;
