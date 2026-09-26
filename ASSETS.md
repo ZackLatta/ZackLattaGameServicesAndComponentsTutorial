@@ -1,0 +1,1 @@
+This game uses the Arial font from your operating system.  If it is not installed, switch the font used in Content/Fonts/ToastFont.spritefont to one that you have access to.
